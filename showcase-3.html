@@ -1,0 +1,171 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Jasmine Spec Runner v5.5.0</title>
+
+    <link rel="shortcut icon" type="image/png" href="lib/jasmine-5.0.0/jasmine_favicon.png" />
+    <link rel="stylesheet" href="lib/jasmine-5.0.0/jasmine.css" />
+
+    <script src="lib/jasmine-5.0.0/jasmine.js"></script>
+    <script src="lib/jasmine-5.0.0/jasmine-html.js"></script>
+    <script src="lib/jasmine-5.0.0/boot0.js"></script>
+    <script src="lib/jasmine-5.0.0/boot1.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              clifford: '#da373d',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <script>
+      // Case 1: Spies
+      /** What
+      - Provide a way to verify that certain functions are called
+      - records information such as:
+        + the number of times the function was called.
+        + the arguments passed to it.
+        + even the return value.
+      **/
+
+      /** When to Use Spies?
+      - Verify Function Calls: use to check if a specific function has been called, with which arguments, and how many times.
+      => your code behaves as expected and desired functions are invoked correctly.
+      - Create Mock Implementations: used to create mock implementations of functions.
+      => control its behavior, specify its return value, or simulate certain scenarios.
+      **/
+
+      // Dev's code
+      const apiService = {
+        fetchUserData: async (userId) => {
+          // Make API request to typicode API to fetch user data
+          console.log('fetchUserData is called');
+          const userPromise = fetch('https://jsonplaceholder.typicode.com/users/' + userId);
+          return await (await userPromise).json();
+        },
+      };
+
+      const userManager = {
+        getUserData: async (userId) => {
+          const userData = await apiService.fetchUserData(userId);
+          return {
+            id: userData?.id,
+            name: userData?.name,
+            email: userData?.email,
+          };
+        },
+      };
+
+      // Tester check
+      describe('API Services', () => {
+        describe('Test case 1: Invoke fetchUserData', () => {
+          it('should call fetchUserData with the correct userId', async () => {
+            spyOn(apiService, 'fetchUserData');
+
+            const userId = 2;
+            // Invoke a function that uses fetchUserData
+            await userManager.getUserData(userId);
+
+            expect(apiService.fetchUserData).toHaveBeenCalledWith(userId);
+            expect(apiService.fetchUserData).toHaveBeenCalledTimes(1);
+          });
+        });
+
+        describe('Test case 2: Invoke fetchUserData with mock implementations', () => {
+          it('should call fetchUserData with the correct userId', async () => {
+            spyOn(apiService, 'fetchUserData').and.returnValue(
+              Promise.resolve({
+                id: 1,
+                name: 'Barox',
+                email: 'barox@example.com',
+              })
+            );
+
+            const userId = 2;
+            // Invoke a function that uses fetchUserData
+            const user = await userManager.getUserData(userId);
+            console.log('🚀 ~ file: showcase-3.html:100 ~ it ~ user:', user);
+
+            expect(user).toEqual({
+              id: 1,
+              name: 'Barox',
+              email: 'barox@example.com',
+            });
+            expect(apiService.fetchUserData).toHaveBeenCalledTimes(1);
+          });
+        });
+      });
+
+      // Case 2: Asynchronous testing
+      const postServices = {
+        createPost: async (postData) => {
+          const postPromise = fetch('https://jsonplaceholder.typicode.com/posts', {
+            method: 'POST',
+            body: JSON.stringify(postData),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          });
+
+          return await postPromise;
+        },
+      };
+
+      // Jasmine test
+      describe('Test case 2: Create new post.', () => {
+        it("should create a new post successfully with response's status code is 201.", async () => {
+          // Make the createPost API call
+          const sampleData = {
+            title: "Jasmine' demo",
+            body: "We're exploring a new technology",
+            userId: 1,
+          };
+          const response = await postServices.createPost(sampleData);
+          const createdPost = await response.json();
+          const expectedStatusCode = 201;
+
+          expect(response.status).toBe(expectedStatusCode);
+          expect(response.ok).toBeTruthy();
+          expect(createdPost).toBeDefined();
+          expect(createdPost.title).toEqual(sampleData.title);
+        });
+      });
+
+      // Case 3: Pending test
+      /**
+        allows you to focus on and execute the tests that 
+        are ready while keeping track of the pending tests that need to be completed in the future.
+      */
+
+      describe('My Test Suite', () => {
+        it('should pass', () => {
+          expect(true).toBe(true);
+        });
+
+        xit('should be a pending test', () => {
+          // This test is marked as pending and will not be executed
+          expect(true).toBe(true);
+        });
+
+        it('should be another pending test', () => {
+          pending('Work in progress'); // Marks the test as pending with a custom message
+          expect(true).toBe(true);
+        });
+      });
+    </script>
+  </body>
+</html>

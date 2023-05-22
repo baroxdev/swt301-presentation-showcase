@@ -11,7 +11,6 @@
     <script src="lib/jasmine-5.0.0/boot0.js"></script>
     <script src="lib/jasmine-5.0.0/boot1.js"></script>
 
-    <!-- include spec files here... -->
     <script>
       function Calculator() {
         this.add = function (a, b) {
@@ -29,31 +28,11 @@
       }
     </script>
     <script>
-      describe('Add and Minus', function () {
-        const cal = new Calculator();
-        it('one add one is two', function () {
-          expect(2).toBe(cal.add(1, 1));
-        });
-
-        it('Two add two is four', function () {
-          expect(4).toBe(cal.add(2, 2));
-        });
-
-        it('Five minus two is three', function () {
-          expect(3).toBe(cal.minus(5, 2));
-        });
-      });
-
-      describe('Plus and divide', function () {
-        var cal = new Calculator();
-        it('Five plus two is ten', function () {
-          expect(10).toBe(cal.multiply(5, 2));
-        });
-
-        it('Six divide two is three', function () {
-          expect(3).toBe(cal.divide(6, 2));
-        });
-      });
+      // TODO: Write a spec these test cases
+      // 1. 1 + 2 = 3
+      // 2. 16 - 1 = 15
+      // 3. 5 * 7 = 35
+      // 4. 10 / 2 = 5
     </script>
     >
   </head>

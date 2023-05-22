@@ -23,3 +23,11 @@ describe('Plus and divide', function () {
     expect(3).toBe(cal.divide(6, 2));
   });
 });
+
+
+
+// describe(title, function () {
+//   it(describeWhatYouExpect, function () {
+//     expect(expectValue).toBe(matcher)
+//   })
+// })
